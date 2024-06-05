@@ -90,13 +90,13 @@ class InfoPage extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.battery_1_bar, size: 50.0),
                       onPressed: () {
-                        _showInfoDialog(context, 'bateria', 'Información sobre las latas.');
+                        _showInfoDialog(context, 'Bateria', 'Información sobre las latas.');
                       },
                     ),
                     IconButton(
                       icon: Icon(Icons.iron, size: 50.0),
                       onPressed: () {
-                        _showInfoDialog(context, 'Metal', 'Descripción: Restos de fierro, acero, rejas, tarros, artefactos, tablas de planchar, tendederos, bicicletas, entre otros. ' '\n\n' +
+                        _showInfoDialog(context, 'Lata', 'Descripción: Latas, tarros, aluminio, entre otros. ' '\n\n' +
             'Preparación: Separar otros materiales de la chatarra metálica como madera o plástico. ' '\n\n' +
             'Limpios, sin restos de grasas, alimentos, líquidos u otros elementos en su interior');
                       },

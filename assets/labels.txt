@@ -1,6 +1,6 @@
-battery
-cardboard
-glass
-metal
-paper
-plastic
+Batería
+Cartón
+Vidrio
+Lata
+Papel
+Plástico

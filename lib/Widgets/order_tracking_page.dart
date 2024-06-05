@@ -131,7 +131,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order Tracking'),
+        title: const Text('Centros de Reciclaje'),
       ),
       body: _isMapInitialized
           ? GoogleMap(
