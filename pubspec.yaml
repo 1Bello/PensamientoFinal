@@ -1,0 +1,49 @@
+name: testapp
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  video_player: ^2.2.19
+  camera: ^0.10.0+1
+  camera_web: ^0.3.3
+  cupertino_icons: ^1.0.6
+  tflite_v2: ^1.0.0
+  path_provider: ^2.0.5
+  url_launcher: ^6.0.10
+  image_picker: ^1.0.4
+  http: ^0.13.4
+  image: ^3.0.1
+  firebase_core: ^2.32.0
+  firebase_auth: ^4.20.0
+  youtube_player_flutter: ^8.0.0
+  shared_preferences: ^2.2.3
+  google_maps_flutter: ^2.1.7
+  flutter_svg: ^1.1.0
+  location: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/videos/
+    - assets/labels.txt
+    - assets/EcoSnapModelfinal.tflite
+    
+  fonts:
+    - family: Typefesse
+      fonts:
+        - asset: assets/fonts/typefesse/Typefesse_Claire-Obscure.otf
+        - asset: assets/fonts/typefesse/Typefesse_Pleine.otf

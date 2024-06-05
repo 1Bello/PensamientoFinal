@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "222963993144",
+    "project_id": "ecosnap-c800f",
+    "storage_bucket": "ecosnap-c800f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222963993144:android:de7c2e8ad48920170c74cd",
+        "android_client_info": {
+          "package_name": "com.example.testapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI-JzAxNNrMah-Hxd5Kvp0lUeKpzKP7ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
