@@ -66,14 +66,14 @@ class InfoPage extends StatelessWidget {
                   mainAxisSpacing: 10.0,
                   children: [
                     IconButton(
-                      icon: Image.asset('assets/images/caja.png', width: 50.0, height: 50.0),
+                      icon: Image.asset('assets/images/Cartón.png', width: 50.0, height: 50.0),
                       onPressed: () {
                         _showInfoDialog(context, 'Cartón', 'Descripción: Incluye cajas de cartón, cartulinas, papel kraft, cajas de cereales, y más. ' '\n\n' +
             'Preparación: Deben estar limpias, aplastadas y sin restos de comida, plumavit o cinta adhesiva.',);
                       },
                     ),
                     IconButton(
-                      icon: Image.asset('assets/images/vidrio.png', width: 50.0, height: 50.0),
+                      icon: Image.asset('assets/images/Vidrio.png', width: 50.0, height: 50.0),
                       onPressed: () {
                         _showInfoDialog(context, 'Vidrio', 'Descripción: Botellas y frascos de vidrio, envases de perfumes y medicamentos, vasos y copas. ' '\n\n' +
             'Preparación: Retira las tapas o corcho y enjuaga los envases.' '\n\n' + 
@@ -81,20 +81,20 @@ class InfoPage extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: Image.asset('assets/images/plastic.png', width: 50.0, height: 50.0),
+                      icon: Image.asset('assets/images/Plástico.png', width: 50.0, height: 50.0),
                       onPressed: () {
                         _showInfoDialog(context, 'Plástico', 'Descripción: Incluye botellas de plástico de aguas, bebidas o jugos, envases de jabón, shampoo, detergente, productos de limpieza y leche, bolsas de supermercado, envoltorios de plástico y film para embalar. ' '\n\n' +
             'Preparación: Los envases deben enjuagarse y compactarse para reducir su volumen.');
                       },
                     ),
                     IconButton(
-                     icon: Image.asset('assets/images/bateria.png', width: 50.0, height: 50.0),
+                     icon: Image.asset('assets/images/Batería.png', width: 50.0, height: 50.0),
                       onPressed: () {
                         _showInfoDialog(context, 'Bateria', 'Información sobre las latas.');
                       },
                     ),
                     IconButton(
-                      icon: Image.asset('assets/images/lata.png', width: 50.0, height: 50.0),
+                      icon: Image.asset('assets/images/Lata.png', width: 50.0, height: 50.0),
                       onPressed: () {
                         _showInfoDialog(context, 'Lata', 'Descripción: Latas, tarros, aluminio, entre otros. ' '\n\n' +
             'Preparación: Separar otros materiales de la chatarra metálica como madera o plástico. ' '\n\n' +
@@ -102,7 +102,7 @@ class InfoPage extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: Image.asset('assets/images/papel.png', width: 50.0, height: 50.0),
+                      icon: Image.asset('assets/images/Papel.png', width: 50.0, height: 50.0),
                       onPressed: () {
                         _showInfoDialog(context, 'Papel', 'Descripción: Incluye hojas blancas, cuadernos, diarios y revistas.' '\n\n' +
             'Preparación: Las hojas deben estar sin pintura y los cuadernos sin forros, ni espirales, ni clips.''\n\n' +

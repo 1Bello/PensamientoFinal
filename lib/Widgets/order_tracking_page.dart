@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
@@ -19,15 +19,15 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   loc.Location location = loc.Location();
   LatLng _currentPosition = const LatLng(0, 0);
   bool _isMapInitialized = false;
-  Set<Marker> _markers = {}; // Set to hold markers
+  Set<Marker> _markers = {};
   late BitmapDescriptor customIcon;
   GoogleMapsPlaces _places = GoogleMapsPlaces(
-      apiKey:
-          'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM'); // Replace with your own API key
+    apiKey: 'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM',
+  );
   dir.GoogleMapsDirections _directions = dir.GoogleMapsDirections(
-      apiKey:
-          'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM'); // Replace with your own API key
-  Set<Polyline> _polylines = {}; // Set to hold polylines
+    apiKey: 'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM',
+  );
+  Set<Polyline> _polylines = {};
 
   @override
   void initState() {
@@ -37,11 +37,10 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   }
 
   void closeInfoMenu() {
-  // Check if the dialog (or any modal route) is currently displayed.
-  if (Navigator.canPop(context)) {
-    Navigator.pop(context); // This will close the topmost route (e.g., your AlertDialog).
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
   }
-}
 
   Future<void> _checkLocationPermission() async {
     bool _serviceEnabled;
@@ -66,16 +65,23 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     _initializeLocation();
   }
 
+  Future<BitmapDescriptor> _createCustomMarker() async {
+    final ByteData data = await rootBundle.load('assets/images/basuraman_limpio.png');
+    final Codec codec = await ui.instantiateImageCodec(
+      data.buffer.asUint8List(),
+      targetWidth: 120,
+      targetHeight: 120,
+    );
+    final FrameInfo fi = await codec.getNextFrame();
+    final ByteData? byteData = await fi.image.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List resizedMarker = byteData!.buffer.asUint8List();
+
+    return BitmapDescriptor.fromBytes(resizedMarker);
+  }
+
   Future<void> _loadCustomMarker() async {
-    final ImageConfiguration imageConfiguration = ImageConfiguration();
-    BitmapDescriptor.fromAssetImage(
-            imageConfiguration, 'assets/images/basuraman_limpio.png',
-            mipmaps: true)
-        .then((icon) {
-      setState(() {
-        customIcon = icon;
-      });
-    });
+    customIcon = await _createCustomMarker();
+    setState(() {});
   }
 
   void _initializeLocation() async {
@@ -84,8 +90,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     try {
       _locationData = await location.getLocation();
       setState(() {
-        _currentPosition =
-            LatLng(_locationData.latitude!, _locationData.longitude!);
+        _currentPosition = LatLng(_locationData.latitude!, _locationData.longitude!);
         _isMapInitialized = true;
       });
 
@@ -98,12 +103,10 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       print("Error getting location: $e");
     }
 
-    // Add markers after initializing location
     _addMarkers();
   }
 
   void _addMarkers() {
-    // Add markers with custom icon and fetch place details on tap
     _markers.add(
       Marker(
         markerId: MarkerId('Punto Limpio1'),
@@ -162,8 +165,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   }
 
   void _onMarkerTapped(MarkerId markerId) async {
-    final placeId = _getPlaceIdFromMarkerId(
-        markerId); // Function to get placeId based on markerId
+    final placeId = _getPlaceIdFromMarkerId(markerId);
     if (placeId != null) {
       PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(placeId);
       if (detail.status == "OK") {
@@ -223,11 +225,12 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     }
   }
 
-  void _drawRoute(
-      {required double startLat,
-      required double startLng,
-      required double endLat,
-      required double endLng}) async {
+  void _drawRoute({
+    required double startLat,
+    required double startLng,
+    required double endLat,
+    required double endLng,
+  }) async {
     dir.DirectionsResponse? response = await _directions.directions(
       dir.Location(
         lat: startLat,
@@ -243,8 +246,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     if (response != null &&
         response.status == "OK" &&
         response.routes.isNotEmpty) {
-      List<LatLng> points =
-          decodePolyline(response.routes[0].overviewPolyline!.points);
+      List<LatLng> points = decodePolyline(response.routes[0].overviewPolyline!.points);
       setState(() {
         _polylines.add(Polyline(
           polylineId: PolylineId('route'),
@@ -257,7 +259,6 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   }
 
   String? _getPlaceIdFromMarkerId(MarkerId markerId) {
-    // Return placeId based on markerId. You need to maintain a map of markerId to placeId.
     Map<String, String> markerToPlaceId = {
       'Punto Limpio1': 'ChIJAXUymObLYpYRP-wT5Wjhd-o',
       'Reciclaje Botellas Vidrio': 'ChIJNWcuD57JYpYRW6JlnMkbcBw',
@@ -306,19 +307,22 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Seguimiento de Pedidos'),
-      ),
       body: _isMapInitialized
           ? GoogleMap(
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
                 _addMarkers();
+                mapController.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(target: _currentPosition, zoom: 14.0),
+                  ),
+                );
               },
-              initialCameraPosition:
-                  CameraPosition(target: _currentPosition, zoom: 14.0),
+              initialCameraPosition: CameraPosition(target: _currentPosition, zoom: 14.0),
               markers: _markers,
               polylines: _polylines,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
             )
           : Center(
               child: CircularProgressIndicator(),

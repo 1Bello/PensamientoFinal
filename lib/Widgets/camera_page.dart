@@ -125,7 +125,8 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
     print("Inference took ${endTime - startTime}ms");
 
     if (_recognitions != null && _recognitions.isNotEmpty) {
-      String itemType = _recognitions[0]['label']; // Llamar a la función para abrir la pantalla de RecyclingInfo
+      String itemType = _recognitions[0][
+          'label']; // Llamar a la función para abrir la pantalla de RecyclingInfo
     }
 
     // Navigate to ImageDisplayPage after detection
@@ -139,7 +140,7 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import '/Widgets/order_tracking_page.dart'; // Ajusta la ruta de importación según sea necesario
+import '/Widgets/order_tracking_page.dart'; // Adjust the import path as necessary
 
 class FullMapScreen extends StatefulWidget {
   @override
@@ -10,20 +10,26 @@ class FullMapScreen extends StatefulWidget {
 
 class _FullMapScreenState extends State<FullMapScreen> {
   late GoogleMapController mapController;
-  LatLng _initialPosition = const LatLng(0, 0); // Se actualizará con la ubicación actual
+  LatLng _initialPosition = const LatLng(0, 0);
   Location location = Location();
-  Set<Marker> _markers = {}; // Set para mantener los marcadores
-  Map<MarkerId, String> _markerInfo = {}; // Map para mantener la información de los marcadores
+  Set<Marker> _markers = {};
+  Map<MarkerId, String> _markerInfo = {};
 
   @override
   void initState() {
     super.initState();
     _determinePosition();
-    // Aquí puedes agregar la lógica para cargar los puntos de reciclaje cercanos y agregarlos como marcadores
   }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    if (_initialPosition.latitude != 0 && _initialPosition.longitude != 0) {
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: _initialPosition, zoom: 14.0),
+        ),
+      );
+    }
   }
 
   Future<void> _determinePosition() async {
@@ -51,6 +57,14 @@ class _FullMapScreenState extends State<FullMapScreen> {
     setState(() {
       _initialPosition = LatLng(_locationData.latitude!, _locationData.longitude!);
     });
+
+    if (mapController != null) {
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: _initialPosition, zoom: 14.0),
+        ),
+      );
+    }
   }
 
   @override
@@ -63,7 +77,7 @@ class _FullMapScreenState extends State<FullMapScreen> {
         );
       },
       child: Container(
-        height: 200, // Ajusta la altura según sea necesario para la previsualización
+        height: 200, // Adjust height as necessary for preview
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.green),
