@@ -6,6 +6,7 @@ import 'package:tflite_v2/tflite_v2.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'recycling_info.dart';
+import 'ImageDisplay.dart';
 
 void main() {
   runApp(MyApp());
@@ -84,7 +85,8 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
 
   Uint8List preprocessImage(File imageFile) {
     img.Image originalImage = img.decodeImage(imageFile.readAsBytesSync())!;
-    img.Image resizedImage = img.copyResize(originalImage, width: 96, height: 96);
+    img.Image resizedImage =
+        img.copyResize(originalImage, width: 96, height: 96);
 
     Float32List floatList = Float32List(96 * 96 * 3);
     int index = 0;
@@ -111,7 +113,8 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
 
     setState(() {
       _recognitions = recognitions;
-      v = recognitions?.map((recognition) => recognition['label']).join(', ') ?? '';
+      v = recognitions?.map((recognition) => recognition['label']).join(', ') ??
+          '';
     });
 
     print("//////////////////////////////////////////////////");
@@ -122,61 +125,21 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
     print("Inference took ${endTime - startTime}ms");
 
     if (_recognitions != null && _recognitions.isNotEmpty) {
-      String itemType = _recognitions[0]['label'];
-      navigateToRecyclingInfo(itemType); // Llamar a la función para abrir la pantalla de RecyclingInfo
+      String itemType = _recognitions[0]['label']; // Llamar a la función para abrir la pantalla de RecyclingInfo
     }
-  }
 
-  void navigateToRecyclingInfo(String itemType) {
-    Map<String, Map<String, String>> recyclingData = {
-      'Batería': {
-        'videoUrl': 'https://youtu.be/BYxhhS5sB94',
-        'info': 'Información sobre el reciclaje de baterías...',
-      },
-      'Cartón': {
-        'videoUrl': 'https://youtu.be/BYxhhS5sB94',
-        'info': 'Descripción: Incluye cajas de cartón, cartulinas, papel kraft, cajas de cereales, y más. ' '\n\n' +
-            'Preparación: Deben estar limpias, aplastadas y sin restos de comida, plumavit o cinta adhesiva.',
-      },
-      'Vidrio': {
-        'videoUrl': 'https://youtu.be/BYxhhS5sB94',
-        'info': 'Descripción: Botellas y frascos de vidrio, envases de perfumes y medicamentos, vasos y copas. ' '\n\n' +
-            'Preparación: Retira las tapas o corcho y enjuaga los envases.' '\n\n' + 
-            'No se reciclan parabrisas, espejos, ampolletas, tubos fluorescentes, loza, cristales, ni vidrio templado.',
-      },
-      'Lata': {
-        'videoUrl': 'https://www.youtube.com/watch?v=NuWQgh-RrSo',
-        'info': 'Descripción: Latas, tarros, aluminio, entre otros. ' '\n\n' +
-            'Preparación: Separar otros materiales de la chatarra metálica como madera o plástico. ' '\n\n' +
-            'Limpios, sin restos de grasas, alimentos, líquidos u otros elementos en su interior',
-      },
-      'Papel': {
-        'videoUrl': 'https://youtu.be/BYxhhS5sB94',
-        'info': 'Descripción: Incluye hojas blancas, cuadernos, diarios y revistas.' '\n\n' +
-            'Preparación: Las hojas deben estar sin pintura y los cuadernos sin forros, ni espirales, ni clips.''\n\n' +
-            'Asegúrate de que estén limpias y secas',
-      },
-      'Plástico': {
-        'videoUrl': 'https://youtu.be/BYxhhS5sB94',
-        'info': 'Descripción: Incluye botellas de plástico de aguas, bebidas o jugos, envases de jabón, shampoo, detergente, productos de limpieza y leche, bolsas de supermercado, envoltorios de plástico y film para embalar. ' '\n\n' +
-            'Preparación: Los envases deben enjuagarse y compactarse para reducir su volumen.',
-      },
-    };
-
-    if (recyclingData.containsKey(itemType)) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RecyclingInfo(
-            itemType: itemType,
-            videoUrl: recyclingData[itemType]!['videoUrl']!,
-            info: recyclingData[itemType]!['info']!,
-          ),
+    // Navigate to ImageDisplayPage after detection
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageDisplayPage(
+          image: _image,
+          recognitions: _recognitions,
         ),
-      );
-    }
+      ),
+    );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,8 +149,8 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
           children: <Widget>[
             if (_image != null)
               Container(
-                width: 250,
-                height: 250,
+                width: 200,
+                height: 200,
                 child: Image.file(
                   File(_image!.path),
                   fit: BoxFit.contain,
@@ -205,8 +168,6 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
               onPressed: _pickImageGallery,
               child: Text('Pick from Gallery'),
             ),
-            SizedBox(height: 20),
-            Text(v),
           ],
         ),
       ),
