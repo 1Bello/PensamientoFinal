@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsPage extends StatelessWidget {
   final String supportPhoneNumber = '+56993948960'; // Número de soporte telefónico
@@ -45,13 +46,23 @@ class SettingsPage extends StatelessWidget {
               ),
             ],
           ),
+          ListTile(
+            title: Text(
+              'Cerrar Sesión',
+              style: TextStyle(color: Colors.red),
+            ),
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, '/signIn');
+            },
+          ),
         ],
       ),
     );
   }
 
   // Función para lanzar la aplicación de marcación del teléfono
-  _launchPhoneApp(String phoneNumber) async {
+  void _launchPhoneApp(String phoneNumber) async {
     String url = 'tel:$phoneNumber';
     if (await canLaunch(url)) {
       await launch(url);

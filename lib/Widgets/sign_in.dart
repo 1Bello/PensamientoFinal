@@ -12,7 +12,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _showPassword = false; // Flag to control password visibility
+  // bool _showPassword = false; // Flag to control password visibility
   late SharedPreferences _prefs; // Declare SharedPreferences instance
 
   @override

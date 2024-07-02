@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import '/Widgets/order_tracking_page.dart'; // Adjust the import path as necessary
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '/Widgets/map_review.dart'; // Adjust the import path as necessary
 
 class HomePage extends StatefulWidget {
   @override
@@ -91,16 +93,35 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
+              height: 300,
               margin: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.green),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: GestureDetector(
+                onTap: (){
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => OrderTrackingPage()),
                   );
                 },
-                child: Text('Show Map'),
-              ),
+                child: Column(children: [
+                  Text(
+                      'Centro de Reciclajes',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: FullMapScreen(),
+                    ),
+                ],)
+              )
             ),
           ],
         ),
