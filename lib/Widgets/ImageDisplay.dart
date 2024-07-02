@@ -79,8 +79,8 @@ class ImageDisplayPage extends StatelessWidget {
             children: <Widget>[
               if (image != null)
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.width * 0.9,
                   child: Image.file(
                     File(image!.path),
                     fit: BoxFit.contain,

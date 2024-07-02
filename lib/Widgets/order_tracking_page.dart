@@ -21,9 +21,12 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   bool _isMapInitialized = false;
   Set<Marker> _markers = {}; // Set to hold markers
   late BitmapDescriptor customIcon;
-  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: 'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM'); // Replace with your own API key
-  dir.GoogleMapsDirections _directions =
-      dir.GoogleMapsDirections(apiKey: 'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM'); // Replace with your own API key
+  GoogleMapsPlaces _places = GoogleMapsPlaces(
+      apiKey:
+          'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM'); // Replace with your own API key
+  dir.GoogleMapsDirections _directions = dir.GoogleMapsDirections(
+      apiKey:
+          'AIzaSyCVQSdkq2E7r1QiOcAEmAVZncFIvVWQ0mM'); // Replace with your own API key
   Set<Polyline> _polylines = {}; // Set to hold polylines
 
   @override
@@ -32,6 +35,13 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     _checkLocationPermission();
     _loadCustomMarker();
   }
+
+  void closeInfoMenu() {
+  // Check if the dialog (or any modal route) is currently displayed.
+  if (Navigator.canPop(context)) {
+    Navigator.pop(context); // This will close the topmost route (e.g., your AlertDialog).
+  }
+}
 
   Future<void> _checkLocationPermission() async {
     bool _serviceEnabled;
@@ -58,7 +68,8 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 
   Future<void> _loadCustomMarker() async {
     final ImageConfiguration imageConfiguration = ImageConfiguration();
-    BitmapDescriptor.fromAssetImage(imageConfiguration, 'assets/images/basuraman_limpio.png',
+    BitmapDescriptor.fromAssetImage(
+            imageConfiguration, 'assets/images/basuraman_limpio.png',
             mipmaps: true)
         .then((icon) {
       setState(() {
@@ -107,8 +118,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
         markerId: MarkerId('Reciclaje Botellas Vidrio'),
         position: LatLng(-33.338572320718775, -70.5434051377558),
         icon: customIcon,
-        onTap: () =>
-            _onMarkerTapped(MarkerId('Reciclaje Botellas Vidrio')),
+        onTap: () => _onMarkerTapped(MarkerId('Reciclaje Botellas Vidrio')),
       ),
     );
 
@@ -117,8 +127,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
         markerId: MarkerId('Punto Limpio TriCiclos'),
         position: LatLng(-33.38725164393464, -70.49695752663585),
         icon: customIcon,
-        onTap: () =>
-            _onMarkerTapped(MarkerId('Punto Limpio TriCiclos')),
+        onTap: () => _onMarkerTapped(MarkerId('Punto Limpio TriCiclos')),
       ),
     );
 
@@ -145,8 +154,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
         markerId: MarkerId('Centro de reciclaje recoleta'),
         position: LatLng(-33.39323257651344, -70.64147910829533),
         icon: customIcon,
-        onTap: () =>
-            _onMarkerTapped(MarkerId('Centro de reciclaje recoleta')),
+        onTap: () => _onMarkerTapped(MarkerId('Centro de reciclaje recoleta')),
       ),
     );
 
@@ -154,7 +162,8 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   }
 
   void _onMarkerTapped(MarkerId markerId) async {
-    final placeId = _getPlaceIdFromMarkerId(markerId); // Function to get placeId based on markerId
+    final placeId = _getPlaceIdFromMarkerId(
+        markerId); // Function to get placeId based on markerId
     if (placeId != null) {
       PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(placeId);
       if (detail.status == "OK") {
@@ -196,6 +205,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
                 ),
                 TextButton(
                   onPressed: () {
+                    closeInfoMenu();
                     _drawRoute(
                       startLat: _currentPosition.latitude,
                       startLng: _currentPosition.longitude,
@@ -213,13 +223,13 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     }
   }
 
- void _drawRoute(
-    {required double startLat,
-    required double startLng,
-    required double endLat,
-    required double endLng}) async {
-  dir.DirectionsResponse? response = await _directions.directions(
-    dir.Location(
+  void _drawRoute(
+      {required double startLat,
+      required double startLng,
+      required double endLat,
+      required double endLng}) async {
+    dir.DirectionsResponse? response = await _directions.directions(
+      dir.Location(
         lat: startLat,
         lng: startLng,
       ),
@@ -230,22 +240,21 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       travelMode: dir.TravelMode.driving,
     );
 
-  if (response != null &&
-      response.status == "OK" &&
-      response.routes.isNotEmpty) {
-    List<LatLng> points =
-        decodePolyline(response.routes[0].overviewPolyline!.points);
-    setState(() {
-      _polylines.add(Polyline(
-        polylineId: PolylineId('route'),
-        points: points,
-        color: Colors.blue,
-        width: 5,
-      ));
-    });
+    if (response != null &&
+        response.status == "OK" &&
+        response.routes.isNotEmpty) {
+      List<LatLng> points =
+          decodePolyline(response.routes[0].overviewPolyline!.points);
+      setState(() {
+        _polylines.add(Polyline(
+          polylineId: PolylineId('route'),
+          points: points,
+          color: Colors.blue,
+          width: 5,
+        ));
+      });
+    }
   }
-}
-
 
   String? _getPlaceIdFromMarkerId(MarkerId markerId) {
     // Return placeId based on markerId. You need to maintain a map of markerId to placeId.
