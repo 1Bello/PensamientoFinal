@@ -72,70 +72,82 @@ class ImageDisplayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              if (image != null)
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.width * 0.9,
-                  child: Image.file(
-                    File(image!.path),
-                    fit: BoxFit.contain,
-                  ),
-                )
-              else
-                Text('No image selected'),
-              SizedBox(height: 20),
-              Text(
-                recognitions.isNotEmpty
-                    ? 'Esto es ${recognitions[0]['label']}'
-                    : 'No object detected',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/wallpaper.png"),
+                fit: BoxFit.cover,
               ),
-              SizedBox(height: 20),
-              if (recognitions.isNotEmpty)
-                Column(
-                  children: recognitions.map((recognition) {
-                    String itemType = recognition['label'];
-                    double confidence = recognition['confidence'] * 100;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          navigateToRecyclingInfo(itemType, context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/$itemType.png',
-                              height: 60,
-                              width: 60,
-                            ),
-                            SizedBox(width: 16),
-                            Text(
-                              '$itemType (${confidence.toStringAsFixed(2)}%)',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Elige otra imagen'),
-              ),
-            ],
+            ),
           ),
-        ),
+          Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  if (image != null)
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.width * 0.9,
+                      child: Image.file(
+                        File(image!.path),
+                        fit: BoxFit.contain,
+                      ),
+                    )
+                  else
+                    Text('No image selected'),
+                  SizedBox(height: 20),
+                  Text(
+                    recognitions.isNotEmpty
+                        ? 'Esto es ${recognitions[0]['label']}'
+                        : 'No object detected',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  if (recognitions.isNotEmpty)
+                    Column(
+                      children: recognitions.map((recognition) {
+                        String itemType = recognition['label'];
+                        double confidence = recognition['confidence'] * 100;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              navigateToRecyclingInfo(itemType, context);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/$itemType.png',
+                                  height: 60,
+                                  width: 60,
+                                ),
+                                SizedBox(width: 16),
+                                Text(
+                                  '$itemType (${confidence.toStringAsFixed(2)}%)',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Elige otra imagen'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

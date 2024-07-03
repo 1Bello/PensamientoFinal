@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
@@ -67,12 +66,12 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 
   Future<BitmapDescriptor> _createCustomMarker() async {
     final ByteData data = await rootBundle.load('assets/images/basuraman_limpio.png');
-    final Codec codec = await ui.instantiateImageCodec(
+    final ui.Codec codec = await ui.instantiateImageCodec(
       data.buffer.asUint8List(),
-      targetWidth: 120,
-      targetHeight: 120,
+      targetWidth: 250,
+      targetHeight: 200,
     );
-    final FrameInfo fi = await codec.getNextFrame();
+    final ui.FrameInfo fi = await codec.getNextFrame();
     final ByteData? byteData = await fi.image.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List resizedMarker = byteData!.buffer.asUint8List();
 
@@ -106,62 +105,64 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     _addMarkers();
   }
 
+  Future<double> _calculateRouteDistance(double startLat, double startLng, double endLat, double endLng) async {
+    dir.DirectionsResponse? response = await _directions.directions(
+      dir.Location(
+        lat: startLat,
+        lng: startLng,
+      ),
+      dir.Location(
+        lat: endLat,
+        lng: endLng,
+      ),
+      travelMode: dir.TravelMode.driving,
+    );
+
+    if (response != null &&
+        response.status == "OK" &&
+        response.routes.isNotEmpty) {
+      final route = response.routes[0];
+      return route.legs[0].distance!.value / 1000.0; // distance in kilometers
+    } else {
+      throw Exception("Error calculating route distance");
+    }
+  }
+
   void _addMarkers() {
-    _markers.add(
-      Marker(
-        markerId: MarkerId('Punto Limpio1'),
-        position: LatLng(-33.36413955292655, -70.51871732100369),
-        icon: customIcon,
-        onTap: () => _onMarkerTapped(MarkerId('Punto Limpio1')),
-      ),
-    );
+    final markers = [
+      {'id': 'Punto Limpio1', 'position': LatLng(-33.36413955292655, -70.51871732100369)},
+      {'id': 'Reciclaje Botellas Vidrio', 'position': LatLng(-33.338572320718775, -70.5434051377558)},
+      {'id': 'Punto Limpio TriCiclos', 'position': LatLng(-33.38725164393464, -70.49695752663585)},
+      {'id': 'Punto Verde', 'position': LatLng(-33.39867865294377, -70.58208427419848)},
+      {'id': 'Punto Limpio2', 'position': LatLng(-33.40383777894912, -70.56869468732114)},
+      {'id': 'Centro de reciclaje recoleta', 'position': LatLng(-33.39323257651344, -70.64147910829533)},
+    ];
 
-    _markers.add(
-      Marker(
-        markerId: MarkerId('Reciclaje Botellas Vidrio'),
-        position: LatLng(-33.338572320718775, -70.5434051377558),
-        icon: customIcon,
-        onTap: () => _onMarkerTapped(MarkerId('Reciclaje Botellas Vidrio')),
-      ),
-    );
+    for (var markerData in markers) {
+      final markerId = markerData['id'] as String;
+      final position = markerData['position'] as LatLng;
 
-    _markers.add(
-      Marker(
-        markerId: MarkerId('Punto Limpio TriCiclos'),
-        position: LatLng(-33.38725164393464, -70.49695752663585),
-        icon: customIcon,
-        onTap: () => _onMarkerTapped(MarkerId('Punto Limpio TriCiclos')),
-      ),
-    );
-
-    _markers.add(
-      Marker(
-        markerId: MarkerId('Punto Verde'),
-        position: LatLng(-33.39867865294377, -70.58208427419848),
-        icon: customIcon,
-        onTap: () => _onMarkerTapped(MarkerId('Punto Verde')),
-      ),
-    );
-
-    _markers.add(
-      Marker(
-        markerId: MarkerId('Punto Limpio2'),
-        position: LatLng(-33.40383777894912, -70.56869468732114),
-        icon: customIcon,
-        onTap: () => _onMarkerTapped(MarkerId('Punto Limpio2')),
-      ),
-    );
-
-    _markers.add(
-      Marker(
-        markerId: MarkerId('Centro de reciclaje recoleta'),
-        position: LatLng(-33.39323257651344, -70.64147910829533),
-        icon: customIcon,
-        onTap: () => _onMarkerTapped(MarkerId('Centro de reciclaje recoleta')),
-      ),
-    );
-
-    setState(() {});
+      _calculateRouteDistance(_currentPosition.latitude, _currentPosition.longitude, position.latitude, position.longitude)
+        .then((distance) {
+          setState(() {
+            _markers.add(
+              Marker(
+                markerId: MarkerId(markerId),
+                position: position,
+                icon: customIcon,
+                onTap: () => _onMarkerTapped(MarkerId(markerId)),
+                infoWindow: InfoWindow(
+                  title: markerId,
+                  snippet: '${distance.toStringAsFixed(2)} km',
+                ),
+              ),
+            );
+          });
+        })
+        .catchError((e) {
+          print('Error calculating route distance: $e');
+        });
+    }
   }
 
   void _onMarkerTapped(MarkerId markerId) async {
@@ -188,7 +189,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
                 children: [
                   Text("Name: ${result.name}", style: TextStyle(fontSize: 16)),
                   SizedBox(height: 5),
-                  Text("Address: ${result.formattedAddress}",
+                  SelectableText("Address: ${result.formattedAddress}",
                       style: TextStyle(fontSize: 16)),
                   SizedBox(height: 5),
                   Text("Phone: ${result.formattedPhoneNumber ?? 'N/A'}",

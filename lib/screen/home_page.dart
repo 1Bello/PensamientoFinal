@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:testapp/Widgets/order_tracking_page.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
-import '/Widgets/order_tracking_page.dart'; // Adjust the import path as necessary
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '/Widgets/map_review.dart'; // Adjust the import path as necessary
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,89 +40,103 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 300,
-              margin: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.green),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Noticias de Reciclaje',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: articles.isEmpty
-                        ? Center(child: CircularProgressIndicator())
-                        : ListView.builder(
-                            itemCount: articles.length,
-                            itemBuilder: (context, index) {
-                              String title = articles[index]['title'];
-                              String description = articles[index]['description'] ?? '';
-                              String url = articles[index]['url'];
-                              return ListTile(
-                                title: Text(title),
-                                subtitle: Text(
-                                  description.length > 100
-                                      ? '${description.substring(0, 100)}...'
-                                      : description,
-                                ),
-                                onTap: () {
-                                  _launchURL(url);
-                                },
-                              );
-                            },
-                          ),
-                  ),
-                ],
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/wallpaper.png"),
+                fit: BoxFit.cover,
               ),
             ),
-            Container(
-              height: 300,
-              margin: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.green),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: GestureDetector(
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OrderTrackingPage()),
-                  );
-                },
-                child: Column(children: [
-                  Text(
-                      'Centro de Reciclajes',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 300,
+                  margin: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8), // Make the background a bit transparent
+                    border: Border.all(color: Colors.green),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Noticias de Reciclaje',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
                       ),
+                      SizedBox(height: 10),
+                      Expanded(
+                        child: articles.isEmpty
+                            ? Center(child: CircularProgressIndicator())
+                            : ListView.builder(
+                                itemCount: articles.length,
+                                itemBuilder: (context, index) {
+                                  String title = articles[index]['title'];
+                                  String description = articles[index]['description'] ?? '';
+                                  String url = articles[index]['url'];
+                                  return ListTile(
+                                    title: Text(title),
+                                    subtitle: Text(
+                                      description.length > 100
+                                          ? '${description.substring(0, 100)}...'
+                                          : description,
+                                    ),
+                                    onTap: () {
+                                      _launchURL(url);
+                                    },
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 300,
+                  margin: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8), // Make the background a bit transparent
+                    border: Border.all(color: Colors.green),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OrderTrackingPage()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          'Centro de Reciclajes',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Expanded(
+                          child: OrderTrackingPage(),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 10),
-                    Expanded(
-                      child: OrderTrackingPage(),
-                    ),
-                ],)
-              )
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

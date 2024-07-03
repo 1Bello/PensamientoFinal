@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite_v2/tflite_v2.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
-import 'recycling_info.dart';
 import 'ImageDisplay.dart';
 
 void main() {
@@ -144,33 +143,45 @@ class _ImagePickerDemoState extends State<ImagePickerDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if (_image != null)
-              Container(
-                width: 200,
-                height: 200,
-                child: Image.file(
-                  File(_image!.path),
-                  fit: BoxFit.contain,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/wallpaper.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                if (_image != null)
+                  Container(
+                    width: 200,
+                    height: 200,
+                    child: Image.file(
+                      File(_image!.path),
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                else
+                  Text('No image selected'),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _pickImageCamera,
+                  child: Text('Use Camera'),
                 ),
-              )
-            else
-              Text('No image selected'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImageCamera,
-              child: Text('Use Camera'),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _pickImageGallery,
+                  child: Text('Pick from Gallery'),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImageGallery,
-              child: Text('Pick from Gallery'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
