@@ -28,7 +28,7 @@ dependencies:
   flutter_svg: ^1.1.0
   location: ^6.0.0
   google_maps_webservice: 0.0.20-nullsafety.5 # Asegúrate de verificar la última versión en https://pub.dev/packages/google_maps_webservice
-  
+  webview_flutter: ^2.0.10
 
 dev_dependencies:
   flutter_test:

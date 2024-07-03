@@ -25,7 +25,7 @@ class ImageDisplayPage extends StatelessWidget {
             'Preparación: Deben estar limpias, aplastadas y sin restos de comida, plumavit o cinta adhesiva.',
       },
       'Vidrio': {
-        'videoUrl': 'https://youtu.be/BYxhhS5sB94',
+        'videoUrl': 'https://www.youtube.com/watch?v=k7thTLbQbC8',
         'info': 'Descripción: Botellas y frascos de vidrio, envases de perfumes y medicamentos, vasos y copas. '
             '\n\n' +
             'Preparación: Retira las tapas o corcho y enjuaga los envases.'
@@ -33,7 +33,7 @@ class ImageDisplayPage extends StatelessWidget {
             'No se reciclan parabrisas, espejos, ampolletas, tubos fluorescentes, loza, cristales, ni vidrio templado.',
       },
       'Lata': {
-        'videoUrl': 'https://www.youtube.com/watch?v=NuWQgh-RrSo',
+        'videoUrl': 'https://www.youtube.com/watch?v=phcHgmHILE8',
         'info': 'Descripción: Latas, tarros, aluminio, entre otros. ' '\n\n' +
             'Preparación: Separar otros materiales de la chatarra metálica como madera o plástico. '
             '\n\n' +
@@ -48,7 +48,7 @@ class ImageDisplayPage extends StatelessWidget {
             'Asegúrate de que estén limpias y secas',
       },
       'Plástico': {
-        'videoUrl': 'https://youtu.be/BYxhhS5sB94',
+        'videoUrl': 'https://www.youtube.com/watch?v=DCe59pjPigM',
         'info': 'Descripción: Incluye botellas de plástico de aguas, bebidas o jugos, envases de jabón, shampoo, detergente, productos de limpieza y leche, bolsas de supermercado, envoltorios de plástico y film para embalar. '
             '\n\n' +
             'Preparación: Los envases deben enjuagarse y compactarse para reducir su volumen.',
