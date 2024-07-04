@@ -128,14 +128,38 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     }
   }
 
+ final Map<String, String> _markerInfo = {
+    'Punto Limpio Lo Barnechea': 'papel y diario, cartón, vidrio, plástico (rígido, flexible y botellas PET 1), tetrapak, aluminio, aceite de cocina, libros, tapas de plástico, cápsulas de café, bolsas reutilizables',
+    'Reciclaje Botellas Vidrio': 'Additional info for Reciclaje Botellas Vidrio',
+    'Punto Limpio TriCiclos': 'Additional info for Punto Limpio TriCiclos',
+    'Punto Verde': 'Additional info for Punto Verde',
+    'Punto Limpio2': 'Additional info for Punto Limpio2',
+    'Centro de reciclaje recoleta': 'Additional info for Centro de reciclaje recoleta',
+    'Punto Limpio Cantagallo': 'Additional info for Centro de reciclaje recoleta',
+    'Punto Limpio Observatorio': 'Additional info for Centro de reciclaje recoleta',
+  };
+
+  final Map<String, String> _markerhorario = {
+    'Punto Limpio Lo Barnechea': 'Martes - Domingo: 8:30AM - 20:00PM',
+    'Reciclaje Botellas Vidrio': 'Additional info for Reciclaje Botellas Vidrio',
+    'Punto Limpio TriCiclos': 'Additional info for Punto Limpio TriCiclos',
+    'Punto Verde': 'Additional info for Punto Verde',
+    'Punto Limpio2': 'Additional info for Punto Limpio2',
+    'Centro de reciclaje recoleta': 'Additional info for Centro de reciclaje recoleta',
+    'Punto Limpio Cantagallo': 'Additional info for Centro de reciclaje recoleta',
+    'Punto Limpio Observatorio': 'Additional info for Centro de reciclaje recoleta',
+  };
+
   void _addMarkers() {
     final markers = [
-      {'id': 'Punto Limpio1', 'position': LatLng(-33.36413955292655, -70.51871732100369)},
+      {'id': 'Punto Limpio Lo Barnechea', 'position': LatLng(-33.36765930525515, -70.51881189071077)},
       {'id': 'Reciclaje Botellas Vidrio', 'position': LatLng(-33.338572320718775, -70.5434051377558)},
-      {'id': 'Punto Limpio TriCiclos', 'position': LatLng(-33.38725164393464, -70.49695752663585)},
+      {'id': 'Punto Limpio TriCiclos', 'position': LatLng(-33.416125509883386, -70.53949971882103)},
       {'id': 'Punto Verde', 'position': LatLng(-33.39867865294377, -70.58208427419848)},
       {'id': 'Punto Limpio2', 'position': LatLng(-33.40383777894912, -70.56869468732114)},
       {'id': 'Centro de reciclaje recoleta', 'position': LatLng(-33.39323257651344, -70.64147910829533)},
+      {'id': 'Punto Limpio Cantagallo', 'position': LatLng(-33.37350266295285, -70.5192714576699)},
+      {'id': 'Punto Limpio Observatorio', 'position': LatLng(-33.4039519532913, -70.53741461263681)},
     ];
 
     for (var markerData in markers) {
@@ -171,11 +195,15 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(placeId);
       if (detail.status == "OK") {
         final result = detail.result;
+        String extraInfo = _markerInfo[markerId.value] ?? 'No additional info available';
+        String extraHorario = _markerhorario[markerId.value] ?? 'No additional info available';
         String info = """
           Name: ${result.name}
           Address: ${result.formattedAddress}
           Phone: ${result.formattedPhoneNumber}
           Website: ${result.website}
+          info: $extraInfo
+          horario: $extraHorario
         """;
         showDialog(
           context: context,
@@ -187,16 +215,20 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Name: ${result.name}", style: TextStyle(fontSize: 16)),
+                  Text("Name: ${result.name}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   SizedBox(height: 5),
                   SelectableText("Address: ${result.formattedAddress}",
-                      style: TextStyle(fontSize: 16)),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  // SizedBox(height: 5),
+                  // Text("Phone: ${result.formattedPhoneNumber ?? 'N/A'}",
+                  //     style: TextStyle(fontSize: 16)),
+                  // SizedBox(height: 5),
+                  // Text("Website: ${result.website ?? 'N/A'}",
+                  //     style: TextStyle(fontSize: 16)),
                   SizedBox(height: 5),
-                  Text("Phone: ${result.formattedPhoneNumber ?? 'N/A'}",
-                      style: TextStyle(fontSize: 16)),
+                  Text("Info: $extraInfo",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   SizedBox(height: 5),
-                  Text("Website: ${result.website ?? 'N/A'}",
-                      style: TextStyle(fontSize: 16)),
+                  Text("Horario: $extraHorario",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
                 ],
               ),
               actions: <Widget>[
@@ -261,13 +293,17 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 
   String? _getPlaceIdFromMarkerId(MarkerId markerId) {
     Map<String, String> markerToPlaceId = {
-      'Punto Limpio1': 'ChIJAXUymObLYpYRP-wT5Wjhd-o',
+      'Punto Limpio Lo Barnechea': 'ChIJi_REhJvLYpYRk3qtqHILZI4',
       'Reciclaje Botellas Vidrio': 'ChIJNWcuD57JYpYRW6JlnMkbcBw',
       'Punto Limpio TriCiclos': 'ChIJWbEHEJDOYpYRG3mIbh7ga88',
       'Punto Verde':
-          'EjxQw61vIFhJIDE2MDQsIDc2MzAyNjMgVml0YWN1cmEsIFJlZ2nDs24gTWV0cm9wb2xpdGFuYSwgQ2hpbGUiMRIvChQKEglF_5mSLs9ilhEbyYEt6bJaFxDEDCoUChIJZ9485y7PYpYRCHvMNFJCW9A',
-      'Punto Limpio2': 'ChIJtQW7rsHbYpYRorNaIzUpp6k',
+        'EjxQw61vIFhJIDE2MDQsIDc2MzAyNjMgVml0YWN1cmEsIFJlZ2nDs24gTWV0cm9wb2xpdGFuYSwgQ2hpbGUiMRIvChQKEglF_5mSLs9ilhEbyYEt6bJaFxDEDCoUChIJZ9485y7PYpYRCHvMNFJCW9A',
+      'Punto Limpio2': 'ChIJ50D9YNnOYpYRcG-Kc0Nb0Nc',
       'Centro de reciclaje recoleta': 'ChIJOR1iSQzGYpYRuBuFodSX5OM',
+      'Punto Limpio Cantagallo': 'ChIJiw-el_vLYpYR_-5FOptDzH8',
+      'Punto Limpio Observatorio': 
+        'EkRDYW0uIGRlbCBPYnNlcnZhdG9yaW8gMTkwMCwgTGFzIENvbmRlcywgUmVnacOzbiBNZXRyb3BvbGl0YW5hLCBDaGlsZSIxEi8KFAoSCT3Q496izmKWEaL3P3qfrQCTEOwOKhQKEgmp_BH1pM5ilhEt-DCUWJj6Gg',
+
     };
 
     return markerToPlaceId[markerId.value];

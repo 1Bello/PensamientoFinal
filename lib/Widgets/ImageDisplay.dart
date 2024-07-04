@@ -103,7 +103,7 @@ class ImageDisplayPage extends StatelessWidget {
                     recognitions.isNotEmpty
                         ? 'Esto es ${recognitions[0]['label']}'
                         : 'No object detected',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   SizedBox(height: 20),
                   if (recognitions.isNotEmpty)
